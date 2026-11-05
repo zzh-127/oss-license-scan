@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>现状流程图 · 含判断点</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; padding:24px 28px 30px; background:#fff; color:#1F2937;
+         font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif; }
+  h1 { font-size:19px; margin:0 0 4px; }
+  .sub { font-size:12px; color:#6B7280; margin-bottom:4px; }
+  .nt { font-size:13.5px; fill:#111827; font-weight:600; }
+  .ns { font-size:11.5px; fill:#4B5563; }
+  .role { font-size:11px; fill:#0F766E; }
+  .dg { font-size:12.5px; fill:#1E3A8A; font-weight:600; }
+  .lab { font-size:11px; fill:#E11D48; font-weight:600; }
+  .lg { font-size:11.5px; fill:#4B5563; }
+</style>
+</head>
+<body>
+<h1>现状流程图 · 退货验收与售后协同</h1>
+<div class="sub">实线＝已确认事实　◇＝判断点（人工决策）　橙色＝瓶颈　右侧＝异常路径</div>
+
+<svg width="1160" height="1450" viewBox="0 0 1160 1450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#94A3B8"/>
+    </marker>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#E11D48"/>
+    </marker>
+  </defs>
+
+  <!-- 主链节点 -->
+  <rect x="270" y="24" width="300" height="52" rx="7" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text class="nt" x="288" y="47">客户提交退货申请</text>
+  <text class="role" x="288" y="66">客服</text>
+
+  <!-- D1 -->
+  <polygon points="420,102 530,150 420,198 310,150" fill="#EFF6FF" stroke="#3B82F6"/>
+  <text class="dg" x="420" y="146" text-anchor="middle">符合退货政策？</text>
+  <text class="role" x="420" y="163" text-anchor="middle">客服</text>
+
+  <rect x="270" y="222" width="300" height="52" rx="7" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text class="nt" x="288" y="245">输入：订单·原因·数量·金额</text>
+  <text class="role" x="288" y="264">客服 · 售后工单员</text>
+
+  <rect x="270" y="302" width="300" height="52" rx="7" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text class="nt" x="288" y="325">客户寄回 · 在途跟踪</text>
+  <text class="role" x="288" y="344">客户 · 客服</text>
+
+  <rect x="270" y="382" width="300" height="52" rx="7" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text class="nt" x="288" y="405">仓库签收 PAK-</text>
+  <text class="role" x="288" y="424">仓库收货岗</text>
+
+  <!-- 瓶颈 -->
+  <rect x="270" y="462" width="300" height="68" rx="7" fill="#FFF7ED" stroke="#F59E0B" stroke-width="2"/>
+  <text class="nt" x="288" y="486">待质检排队　【瓶颈】</text>
+  <text class="ns" x="288" y="504">无系统状态 · 无标准时限</text>
+  <text class="ns" x="288" y="521" fill="#B45309">责任岗位：待定</text>
+
+  <!-- D2 -->
+  <polygon points="420,552 530,600 420,648 310,600" fill="#EFF6FF" stroke="#3B82F6"/>
+  <text class="dg" x="420" y="596" text-anchor="middle">一包多单 / 数量不符？</text>
+  <text class="role" x="420" y="613" text-anchor="middle">退货质检员</text>
+
+  <rect x="270" y="672" width="300" height="52" rx="7" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text class="nt" x="288" y="695">开箱 · 质检判定</text>
+  <text class="role" x="288" y="714">退货质检员（人判）</text>
+
+  <!-- D3 -->
+  <polygon points="420,752 530,800 420,848 310,800" fill="#EFF6FF" stroke="#3B82F6"/>
+  <text class="dg" x="420" y="796" text-anchor="middle">结论为 PASS？</text>
+  <text class="role" x="420" y="813" text-anchor="middle">退货质检员</text>
+
+  <rect x="270" y="872" width="300" height="52" rx="7" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text class="nt" x="288" y="895">结果交付工单员</text>
+  <text class="role" x="288" y="914">质检员 → 工单员</text>
+
+  <!-- D4 -->
+  <polygon points="420,952 530,1000 420,1048 310,1000" fill="#EFF6FF" stroke="#3B82F6"/>
+  <text class="dg" x="420" y="996" text-anchor="middle">接手人已确认？</text>
+  <text class="role" x="420" y="1013" text-anchor="middle">售后工单员</text>
+
+  <rect x="270" y="1072" width="300" height="52" rx="7" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text class="nt" x="288" y="1095">退款审批（按金额分级）</text>
+  <text class="role" x="288" y="1114">审批人（人判）</text>
+
+  <rect x="270" y="1152" width="300" height="52" rx="7" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text class="nt" x="288" y="1175">退款执行 · 客户通知</text>
+  <text class="role" x="288" y="1194">财务 · 客服</text>
+
+  <rect x="270" y="1232" width="300" height="52" rx="7" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text class="nt" x="288" y="1255">回写状态 · 归档留痕</text>
+  <text class="role" x="288" y="1274">售后工单员</text>
+
+  <!-- 主链箭头 -->
+  <g stroke="#94A3B8" stroke-width="1.5" fill="none" marker-end="url(#a)">
+    <path d="M420,76 L420,100"/>
+    <path d="M420,198 L420,220"/>
+    <path d="M420,274 L420,300"/>
+    <path d="M420,354 L420,380"/>
+    <path d="M420,434 L420,460"/>
+    <path d="M420,530 L420,550"/>
+    <path d="M420,648 L420,670"/>
+    <path d="M420,724 L420,750"/>
+    <path d="M420,848 L420,870"/>
+    <path d="M420,924 L420,950"/>
+    <path d="M420,1048 L420,1070"/>
+    <path d="M420,1124 L420,1150"/>
+    <path d="M420,1204 L420,1230"/>
+  </g>
+  <g class="ns" fill="#6B7280">
+    <text x="430" y="212">是</text><text x="430" y="662">否</text>
+    <text x="430" y="862">是</text><text x="430" y="1062">是</text>
+  </g>
+
+  <!-- 右侧异常 -->
+  <rect x="680" y="104" width="420" height="56" rx="7" fill="#fff" stroke="#94A3B8" stroke-dasharray="5 4"/>
+  <text class="nt" x="696" y="127">驳回 · 通知客户</text>
+  <text class="role" x="696" y="147">客服</text>
+
+  <rect x="680" y="378" width="420" height="58" rx="7" fill="#fff" stroke="#94A3B8" stroke-dasharray="5 4"/>
+  <text class="nt" x="696" y="400">系统不可用 → 只读快照</text>
+  <text class="ns" x="696" y="419">显示「暂未更新」，重连按编号去重补齐</text>
+  <text class="role" x="880" y="419">OMS 工程师</text><text class="ns" x="1050" y="419" fill="#9CA3AF">f35</text>
+
+  <rect x="680" y="556" width="420" height="62" rx="7" fill="#fff" stroke="#E11D48" stroke-dasharray="5 4"/>
+  <text class="nt" x="696" y="579">暂停判定 → 工单员核对</text>
+  <text class="ns" x="696" y="598">拆单逐单核对，不做自动结论</text>
+  <text class="role" x="890" y="598">售后工单员</text><text class="ns" x="1050" y="598" fill="#9CA3AF">f11 f15</text>
+
+  <rect x="680" y="766" width="420" height="62" rx="7" fill="#fff" stroke="#94A3B8" stroke-dasharray="5 4"/>
+  <text class="nt" x="696" y="789">转人工裁定</text>
+  <text class="ns" x="696" y="808">标注触发原因·接手人·确认时间；版本冲突附两版</text>
+  <text class="role" x="890" y="808">工单员 → 风险专员</text><text class="ns" x="1050" y="808" fill="#9CA3AF">f24 f44</text>
+
+  <rect x="680" y="966" width="420" height="62" rx="7" fill="#fff" stroke="#94A3B8" stroke-dasharray="5 4"/>
+  <text class="nt" x="696" y="989">待办不关闭</text>
+  <text class="ns" x="696" y="1008">仅发消息不算交接，责任未转移</text>
+  <text class="role" x="890" y="1008">售后工单员</text><text class="ns" x="1050" y="1008" fill="#9CA3AF">f23</text>
+
+  <rect x="680" y="1152" width="420" height="62" rx="7" fill="#fff" stroke="#E11D48" stroke-dasharray="5 4"/>
+  <text class="nt" x="696" y="1175">现场绕行：便签 / 群消息</text>
+  <text class="ns" x="696" y="1194">事后补录 → 客服重复确认</text>
+  <text class="role" x="890" y="1194">质检员 / 工单员</text><text class="ns" x="1050" y="1194" fill="#9CA3AF">f14</text>
+
+  <!-- 异常连线 -->
+  <g stroke="#94A3B8" stroke-width="1.3" stroke-dasharray="5 4" fill="none" marker-end="url(#a)">
+    <path d="M530,150 L678,140"/>
+    <path d="M570,408 L678,408"/>
+    <path d="M530,600 L678,590"/>
+    <path d="M530,800 L678,797"/>
+    <path d="M530,1000 L678,997"/>
+    <path d="M470,700 C560,760 600,1130 678,1170"/>
+  </g>
+  <g class="lab">
+    <text x="580" y="142">否</text>
+    <text x="580" y="583">是</text>
+    <text x="580" y="790">否</text>
+    <text x="580" y="990">否</text>
+  </g>
+
+  <!-- 图例 -->
+  <g>
+    <rect x="270" y="1330" width="830" height="96" rx="7" fill="#F9FAFB" stroke="#E5E7EB"/>
+    <polygon points="300,1378 322,1362 344,1378 322,1394" fill="#EFF6FF" stroke="#3B82F6"/>
+    <text class="lg" x="354" y="1382">判断点：只能由人做的判断（政策审核、异常识别、质检结论、审批）</text>
+    <rect x="300" y="1352" width="24" height="10" rx="2" fill="#FFF7ED" stroke="#F59E0B" stroke-width="2"/>
+    <text class="lg" x="354" y="1361">瓶颈：待质检排队，责任岗位待定（需顾明岚定时限、唐映秋定交接字段）</text>
+    <text class="lg" x="354" y="1408">待核实：各节点耗时与约定时限尚无统计（f01、f25）　｜　人判不可替代：质检、审批、风险认定</text>
+  </g>
+</svg>
+</body>
+</html>
