@@ -13,6 +13,7 @@
 | 现状流程图（任务 2） | [docs/现状流程图_任务2.html](退货验收与售后协同/docs/现状流程图_任务2.html) | — |
 | 项目原有资料（4 份） | [docs/项目原有资料/](退货验收与售后协同/docs/项目原有资料) | — |
 | MVP 原型源码 + 事实库 | [src/](退货验收与售后协同/src) | [MVP 演示站](https://returns-mvp.app.workbuddy.host/?sharecode=CRDF2OOZ6U) |
+| Issue / PR 提交截图 | [docs/提交截图/](退货验收与售后协同/docs/提交截图) | [Issue #2](https://github.com/DianaCheng817/DianaCheng/issues/2) ｜ [PR #1](https://github.com/DianaCheng817/DianaCheng/pull/1) |
 
 调研智能体（知识库问答 + RAG 检索 + Harness 评分）已独立部署，可在线提问：
 
