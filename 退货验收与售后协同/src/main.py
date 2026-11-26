@@ -172,40 +172,66 @@ def completion(date: str = CALIBER_DATE, caliber: str = ""):
 
 
 SYNONYMS = {
-    "一包多单": ["多个订单", "件数量", "不一致"], "卡在哪": ["签收", "排", "等待"],
-    "黑箱": ["签收", "排", "状态"], "多久": ["时长", "等待"], "红线": ["不能", "权限", "退款"],
-    "自动退款": ["不能", "权限"],
+    "一包多单": ["多个订单", "件数量", "不一致"], "卡在哪": ["签收", "排检", "等待"],
+    "黑箱": ["签收", "排检", "状态"], "多久": ["时长", "等待"], "红线": ["不能", "权限", "退款"],
+    "自动退款": ["不能", "权限"], "慢": ["等待", "排检", "时长", "延误"],
+    "卡": ["等待", "排检", "停滞"], "催": ["催问", "状态", "客服"],
     "异常件": ["异常", "不一致", "分派"], "完成": ["到仓", "验收", "到账"], "口径": ["到仓", "验收", "到账"],
+    "交接": ["接手", "确认", "待办"], "权限": ["授权", "岗位", "签核"],
 }
 MIN_SCORE = 2.4  # 低于该分数视为无依据，避免用弱相关事实回答并列条凑数
+
+# 疑问词与口头语先剥离：否则「退货为什么慢」会被当成一个完整检索词，永远不命中
+STOP_PHRASES = ["请问", "我想知道", "想知道", "帮我", "为什么", "为啥", "怎么样", "怎么",
+                "如何", "多长时间", "多少", "是什么", "什么", "能否", "能不能", "可不可以",
+                "是否", "可以", "一下", "的话", "多久", "吗", "呢", "吧", "呀", "啊", "嘛", "的", "了"]
+SPLIT_RE = re.compile(r"[\s，。？?！!、；;：:,\.\(\)（）\[\]【】\"'“”‘’]+")
 
 
 def bigrams(s: str):
     return {s[i:i + 2] for i in range(len(s) - 1)} if len(s) > 1 else {s}
 
 
+def query_units(q: str):
+    s = q or ""
+    for p in STOP_PHRASES:
+        s = s.replace(p, " ")
+    parts = [p.strip() for p in SPLIT_RE.split(s) if p.strip()]
+    return parts or ([q.strip()] if q.strip() else [])
+
+
 @app.get("/api/kb/ask")
 def kb_ask(q: str):
-    terms = [t for t in re.split(r"[\s，。？、,?]+", q) if t]
-    expanded = []
-    for t in terms:
-        expanded.append(t)
-        for k, vs in SYNONYMS.items():
-            if k in t:
-                expanded.extend(vs)
-    expanded = list(dict.fromkeys(expanded))
+    units = query_units(q)
+    if not units:
+        return {"answer": "尚无记录。", "citations": [],
+                "note": "无来源不编造（f34 口径）"}
+    expanded = list(units)
+    joined = "".join(units)
+    for k, vs in SYNONYMS.items():
+        if k in q or k in joined:
+            expanded.extend(vs)
+    expanded = list(dict.fromkeys([e for e in expanded if e]))
+    syn_only = [e for e in expanded if e not in units]
+
+    qb = set()
+    for u in units:
+        qb |= bigrams(u)
+
     scored = []
     for f in FACT_LIST:
         blob = f["text"] + f["topic"] + f["role"] + f["evidence"]
         fb = bigrams(blob)
-        s = 0
-        exact_hit = False
-        for t in expanded:
-            if len(t) >= 2 and t in blob:
-                s += 3
-                exact_hit = True
-            s += 0.2 * len(bigrams(t) & fb)
-        if exact_hit and s >= MIN_SCORE:
+        s = 0.0
+        # 整词命中：原词权重高，同义词低一档
+        s += 3.0 * sum(1 for u in units if u in blob)
+        s += 1.0 * sum(1 for e in syn_only if e in blob)
+        # 二元组覆盖率：短问题能命中，长句不被阈值挡在门外
+        if qb:
+            hit = len(qb & fb)
+            s += 3.0 * hit / len(qb) + 0.4 * hit
+        s += 0.3 * sum(1 for e in syn_only if bigrams(e) & fb)
+        if s >= MIN_SCORE:
             scored.append((s, f))
     scored.sort(key=lambda x: -x[0])
     hits = [{"fact_id": f["id"].replace("ecommerce-returns-", ""), "text": f["text"],
