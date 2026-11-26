@@ -180,6 +180,7 @@ SYNONYMS = {
     "交接": ["接手", "确认", "待办"], "权限": ["授权", "岗位", "签核"],
 }
 MIN_SCORE = 2.4  # 低于该分数视为无依据，避免用弱相关事实回答并列条凑数
+PROJECT_NAME = "退货验收与售后协同"  # 出现在模板化事实里，检索前剔除
 
 # 疑问词与口头语先剥离：否则「退货为什么慢」会被当成一个完整检索词，永远不命中
 STOP_PHRASES = ["请问", "我想知道", "想知道", "帮我", "为什么", "为啥", "怎么样", "怎么",
@@ -220,7 +221,8 @@ def kb_ask(q: str):
 
     scored = []
     for f in FACT_LIST:
-        blob = f["text"] + f["topic"] + f["role"] + f["evidence"]
+        # 项目名会出现在部分模板化事实里，先剔除，避免"退货验收"这类词凭字面命中把所有事实拉平
+        blob = (f["text"] + f["topic"] + f["role"] + f["evidence"]).replace(PROJECT_NAME, "")
         fb = bigrams(blob)
         s = 0.0
         # 整词命中：原词权重高，同义词低一档
